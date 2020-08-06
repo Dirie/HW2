@@ -1,0 +1,48 @@
+q1)
+	a) select distinct c.company_name, (select price_amount from acquisitions a where a.company_name = c.company_name) as Price_amount
+	   from companies c where c.status = 'acquired'
+
+
+	b) select c.company_name , a.price_amount from companies c left outer join acquisitions a on a.company_name = c.company_name
+	   where c.status = 'acquired'
+
+
+
+q2)
+	a)select count( distinct company_name) from companies where founded_at >= '2012-01-01' and founded_at <='2014-12-31'
+
+	b)select count( distinct company_name) from companies where founded_at between '2012-01-01' and '2014-12-31'
+
+
+
+q3)
+
+	a) select v1.state, v1.Total_number from (select c.state, count(*) as Total_number from companies c where market like '%Security%' and state like '__%'
+	   group by c.state) as v1 where v1.Total_number = (select max(v2.Total_number) from 
+	   (select c.state, count(*) as Total_number from companies c where market like '%Security%' and state like '__%'
+	   group by c.state) as v2)
+
+	b)
+
+
+
+q4)
+
+
+	a) select v1.city as city_acquired from
+	(select  a.acquirer_city as city, count( distinct a.acquirer_name) as Total_number from acquisitions a
+	group by a.acquirer_city) as v1
+
+	except 
+
+	select v2.city from 
+	(select  a.acquirer_city as city, count( distinct a.acquirer_name) as Total_number from acquisitions a
+	group by a.acquirer_city) as v2,
+	(select  c.city, count(distinct c.company_name) as Total_number from companies c
+	group by c.city) as v3
+
+	where v2.city = v3.city and v2.Total_number <= v3.Total_number
+
+
+
+

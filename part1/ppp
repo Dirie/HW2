@@ -1,0 +1,3 @@
+select  c.city, count(distinct c.company_name) as Total_number from companies c
+group by c.city
+

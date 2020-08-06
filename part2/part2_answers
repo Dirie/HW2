@@ -1,0 +1,74 @@
+part2:
+
+Q1)
+This table stores nodes have length 2.
+
+CREATE TABLE twoPath (
+            src varchar(200),
+            dst varchar(200),
+            length integer
+        );
+
+
+INSERT INTO twoPath
+select l.src , p.dst, l.length+ p.length as len   from paths l, pathsLastUpdated p
+where l.dst = p.src and l.src!=p.dst
+
+INSERT INTO twoPath
+select l.src , p.dst, l.length+ p.length as len   from paths l, pathsLastUpdated p
+where l.dst = p.src and l.src=p.dst
+
+
+--this table stores nodes which has more than 2( 3 and more)
+CREATE TABLE manyPaths (
+            src varchar(200),
+            dst varchar(200),
+            length integer
+        );
+
+insert into manyPaths
+select distinct t.src,l.dst, t.length + l.length as len  from twoPath t, paths l
+where t.dst=l.src
+
+
+create view test as
+select * from paths
+union
+select * from twoPath
+union 
+select * from manyPaths
+
+
+select distinct src,dst, min(length) from test t
+group by src,dst
+
+
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            CREATE TABLE manyPaths (
+            src varchar(200),
+            dst varchar(200),
+            length integer
+        );
+        
+            insert into manyPaths
+            select distinct t.src,l.dst, t.length + l.length as len  from pathsNew t, paths l
+            where t.dst=l.src
+            
+            create view test as
+                select * from paths
+                union
+                select * from twoPath
+                union 
+                select * from manyPaths
+
+
+            select distinct src,dst, min(length) from test t
+            group by src,dst
+            
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Q2)
+
+
+

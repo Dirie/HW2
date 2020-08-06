@@ -1,0 +1,2 @@
+select  a.acquirer_city, count( distinct a.company_name) as Total_number from acquisitions a
+group by a.acquirer_city
